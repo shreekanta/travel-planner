@@ -1,41 +1,10 @@
-# CLAUDE.md
+# CLAUDE.md - Shared Guidance
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides general guidance to Claude Code (claude.ai/code) when working with code in this repository.
+For frontend-specific guidance, see `frontend/CLAUDE.md`.
+For backend-specific guidance, see `backend/CLAUDE.md`.
 
-## Commands
-
-### Backend (FastAPI + Claude Agent SDK)
-
-```bash
-# From project root using uv (preferred — uv.lock is present)
-uv run uvicorn backend.main:app --reload --port 8000
-
-# Or activate the venv directly
-source .venv/bin/activate
-cd backend && uvicorn main:app --reload --port 8000
-
-# Smoke-test the agent without the UI (runs plan_trip for Tokyo)
-cd backend && python travel_agent.py
-
-# Health check
-curl http://localhost:8000/health
-```
-
-### Frontend (Vite + TypeScript)
-
-```bash
-cd frontend
-npm install
-npm run dev          # http://localhost:5173
-npm run build        # tsc + vite build
-```
-
-Point the UI at a non-default backend:
-```bash
-VITE_API=http://localhost:8000 npm run dev
-```
-
-### Environment
+## Environment
 
 `ANTHROPIC_API_KEY` must be set in `backend/.env` before running the backend.
 

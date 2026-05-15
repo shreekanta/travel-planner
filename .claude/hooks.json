@@ -1,0 +1,30 @@
+{
+  "PostToolUse": [
+    {
+      "matcher": "Write|Edit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "FILE_PATH=$(jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE_PATH\" == *.py ]]; then python3 -m py_compile \"$FILE_PATH\" 2>&1 || true; fi",
+          "statusMessage": "Checking Python syntax…"
+        },
+        {
+          "type": "command",
+          "command": "FILE_PATH=$(jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE_PATH\" == *.ts ]]; then cd /Volumes/Elements/shree/claude/MyBiz/TravelPlanner/frontend && npx tsc --noEmit 2>&1 || true; fi",
+          "statusMessage": "Type-checking TypeScript…",
+          "timeout": 30
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /Volumes/Elements/shree/claude/MyBiz/TravelPlanner/backend/token_summary.py 2>/dev/null || true"
+        }
+      ]
+    }
+  ]
+}

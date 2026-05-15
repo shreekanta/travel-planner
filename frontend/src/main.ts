@@ -13,11 +13,11 @@ interface PlanResponse {
   tokens?: Record<string, number>;
 }
 
-const API_BASE: string =
+var API_BASE: string =
   (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API ??
   "http://localhost:8000";
 
-const app = document.getElementById("app") as HTMLElement;
+var app = document.getElementById("app") as HTMLElement;
 
 app.innerHTML = `
   <header>
@@ -48,10 +48,10 @@ app.innerHTML = `
   <article id="result" class="result"></article>
 `;
 
-const form = document.getElementById("form") as HTMLFormElement;
-const submitBtn = document.getElementById("submit") as HTMLButtonElement;
-const statusEl = document.getElementById("status") as HTMLElement;
-const resultEl = document.getElementById("result") as HTMLElement;
+var form = document.getElementById("form") as HTMLFormElement;
+var submitBtn = document.getElementById("submit") as HTMLButtonElement;
+var statusEl = document.getElementById("status") as HTMLElement;
+var resultEl = document.getElementById("result") as HTMLElement;
 
 function setStatus(text: string, kind: "info" | "error" | "ok" = "info"): void {
   statusEl.textContent = text;
@@ -60,8 +60,8 @@ function setStatus(text: string, kind: "info" | "error" | "ok" = "info"): void {
 
 form.addEventListener("submit", async (event: SubmitEvent) => {
   event.preventDefault();
-  const fd = new FormData(form);
-  const payload: PlanRequest = {
+  var fd = new FormData(form);
+  var payload: PlanRequest = {
     destination: String(fd.get("destination") ?? "").trim(),
     origin: String(fd.get("origin") ?? "BLR").trim() || "BLR",
     start_date: String(fd.get("start_date") ?? ""),
@@ -82,29 +82,29 @@ form.addEventListener("submit", async (event: SubmitEvent) => {
   );
 
   try {
-    const res = await fetch(`${API_BASE}/plan`, {
+    var res = await fetch(`${API_BASE}/plan`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
     if (!res.ok) {
-      const txt = await res.text();
+      var txt = await res.text();
       throw new Error(`HTTP ${res.status} — ${txt}`);
     }
-    const data: PlanResponse = await res.json();
+    var data: PlanResponse = await res.json();
     resultEl.innerHTML = await marked.parse(data.markdown ?? "");
     if (data.tokens && data.tokens.input_tokens != null) {
-      const t = data.tokens;
-      const total = (t.input_tokens ?? 0) + (t.output_tokens ?? 0);
-      const cacheStr = t.cache_read_tokens ? ` · cache hit: ${t.cache_read_tokens.toLocaleString()}` : "";
-      const el = document.createElement("p");
+      var t = data.tokens;
+      var total = (t.input_tokens ?? 0) + (t.output_tokens ?? 0);
+      var cacheStr = t.cache_read_tokens ? ` · cache hit: ${t.cache_read_tokens.toLocaleString()}` : "";
+      var el = document.createElement("p");
       el.className = "token-usage";
       el.textContent = `Tokens — in: ${(t.input_tokens ?? 0).toLocaleString()} · out: ${(t.output_tokens ?? 0).toLocaleString()}${cacheStr} · total: ${total.toLocaleString()}`;
       resultEl.appendChild(el);
     }
     setStatus("Done.", "ok");
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
+    var msg = err instanceof Error ? err.message : String(err);
     setStatus(`Error: ${msg}`, "error");
   } finally {
     submitBtn.disabled = false;
